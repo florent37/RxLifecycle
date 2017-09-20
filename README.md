@@ -9,7 +9,7 @@ This capability is useful in Android, where incomplete subscriptions can cause m
 
 <a href='https://ko-fi.com/A160LCC' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi1.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
-[ ![Download](https://api.bintray.com/packages/florent37/maven/rxcomponent-lifecycle/images/download.svg) ](https://bintray.com/florent37/maven/rxcomponent-lifecycle/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/florent37/maven/rxlifecycle/images/download.svg) ](https://bintray.com/florent37/maven/rxlifecycle/_latestVersion)
 
 ```java
 dependencies {
