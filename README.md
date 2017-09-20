@@ -1,73 +1,95 @@
-# RxComponentLifecycle
+# RxLifecycle
 
-Rx binding of new Android Architecture Component Lifecycle
+Rx binding of stock Android Activities & Fragment Lifecycle, avoiding memory leak
+
+This library allows one to automatically finish sequences based on Android lifecycle state,
+This capability is useful in Android, where incomplete subscriptions can cause memory leaks.
+
+**You don't need to extends Activity or Fragment**
 
 <a href='https://ko-fi.com/A160LCC' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi1.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 [ ![Download](https://api.bintray.com/packages/florent37/maven/rxcomponent-lifecycle/images/download.svg) ](https://bintray.com/florent37/maven/rxcomponent-lifecycle/_latestVersion)
 
 ```java
-def arch_version = "1.0.0-alpha3"
-
 dependencies {
-    compile 'com.github.florent37:rxcomponent-lifecycle:1.0.2'
+    compile 'com.github.florent37:rxcomponent-lifecycle:(lastversion)'
 
-    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
-    compile "android.arch.lifecycle:runtime:$arch_version"
-    compile "android.arch.lifecycle:extensions:$arch_version"
+    compile "com.android.support:appcompat-v7:26.0.0"
     
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
 }
 ```
 
-Don't forget to add google's maven
+# Listen to activity / fragment lifecycle events
 
 ```java
-allprojects {
-    repositories {
-        jcenter()
-        maven { url 'https://maven.google.com' }
-    }
-}
-```
-
-# Usage
-
-```java
-Observable.timer(10, TimeUnit.SECONDS) //async task
-
-                .flatMap(value -> RxLifecycle.with(getLifecycle()).onlyIfResumedOrStarted(value))  
-                //only perform the code below if the screen is visible
-                //(give it the value)
-               
-                 .subscribe(event -> //do what you want to display);
-```
-
-```java
-RxLifecycle.with(getLifecycle())
-
-           .onDestroy() //receive all events
-           
-           .subscribe(event -> //do what you had to do on view destroy);
-```
-
-# Events
-
-```java
-RxLifecycle.with(getLifecycle())
-
-           .onCreate() 
-           .onStart() 
-           .onResume() 
-           
-           .onPause() 
-           .onStop() 
+RxLifecycle.with((Fragment / Activity)this)
            .onDestroy()
+           .subscribe(event -> 
+                /*do what you had to do on view destroy*/
+            );
             
-           .onEvent() //all events
-           
-           .subscribe(event -> //do what you had to do on view destroy);
+RxLifecycle.with(getLifeCycle())
+           .onResume()
+           .subscribe(event -> 
+                /*do what you had to do on view resume*/
+            );
 ````
+
+Available events :
+- `.onCreate()`
+- `.onStart()`
+- `.onResume()`
+- `.onPause()`
+- `.onStop()`
+- `.onDestroy()`
+
+# Automatically Dispose Rx Observables
+
+You can dispose an Rx operation when the activity state changes, for example
+
+Using `doOnSubscribe`
+
+```
+Single.timer(10, TimeUnit.MINUTES) //simulates long operation
+          
+          .doOnSubscribe(disposable -> RxLifecycle.with(this).disposeOnDestroyed<Long>(disposable)
+          
+          .subscribe(l -> 
+               ...
+          });
+```
+
+Or `compose`
+
+```
+Observable.timer(10, TimeUnit.MINUTES) //simulates long operation
+          
+          .compose(RxLifecycle.with(this).disposeOnDestroyed<Long>())
+          
+          .subscribe(l -> 
+               ...
+          });
+```
+
+Availables : `disposeOnStop`, `disposeOnPause`, etc...
+
+# Wait until an Activity state
+
+You can **pause** an Rx chain until it's not on an event, for example wait for activity to be resumed to perform an animation
+
+```
+Observable.timer(10, TimeUnit.MINUTES) //simulates long operation
+          
+          //will pause
+          .flatMap(l -> RxLifecycle.with(this).onlyIfResumedOrStarted(l))
+          
+          //only if resumed
+          .subscribe(l -> 
+               ...
+          });
+```
 
 # Credits
 

@@ -1,8 +1,6 @@
 package florent37.github.com.rxlifecycle;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleActivity;
-import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -33,7 +35,6 @@ public class RxLifecycle {
     private final Subject<Lifecycle.Event> subject = PublishSubject.<Lifecycle.Event>create().toSerialized();
     private final RxLifecycleObserver observer;
     private final Lifecycle lifecycle;
-    public  bindUntil;
 
     public RxLifecycle(Lifecycle lifecycle) {
         this.observer = new RxLifecycleObserver(subject);
@@ -141,7 +142,81 @@ public class RxLifecycle {
                 });
     }
 
-    public <T> ObservableTransformer<? super T, ? super T> bindUntil(Lifecycle.State state) {
-        return null;
+    public void disposeOnDestroy(final Disposable disposable) {
+        onDestroy()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Lifecycle.Event>() {
+                    @Override
+                    public void accept(@NonNull Lifecycle.Event event) throws Exception {
+                        disposable.dispose();
+                    }
+                });
+    }
+
+    public void disposeOnStop(final Disposable disposable) {
+        onStop()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Lifecycle.Event>() {
+                    @Override
+                    public void accept(@NonNull Lifecycle.Event event) throws Exception {
+                        disposable.dispose();
+                    }
+                });
+    }
+
+    public void disposeOnPause(final Disposable disposable) {
+        onPause()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Lifecycle.Event>() {
+                    @Override
+                    public void accept(@NonNull Lifecycle.Event event) throws Exception {
+                        disposable.dispose();
+                    }
+                });
+    }
+
+    public <T> ObservableTransformer<T, T> disposeOnDestroy() {
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnDestroy(disposable);
+                    }
+                });
+            }
+        };
+    }
+
+    public <T> ObservableTransformer<T, T> disposeOnPause() {
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnPause(disposable);
+                    }
+                });
+            }
+        };
+    }
+
+    public <T> ObservableTransformer<T, T> disposeOnStop() {
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnStop(disposable);
+                    }
+                });
+            }
+        };
     }
 }

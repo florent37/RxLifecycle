@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import florent37.github.com.rxlifecycle.RxLifecycle;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -29,29 +30,26 @@ public class MainActivity extends AbstractActivity implements LifecycleRegistryO
 
         textView = (TextView) findViewById(R.id.text);
 
+        Single.timer(10, TimeUnit.MINUTES)
+                .doOnSubscribe(disposable -> RxLifecycle.with(getLifecycle()).<Long>disposeOnDestroy(disposable))
+                .subscribe(l -> Log.d(TAG, "test"));
+
         Observable.timer(10, TimeUnit.SECONDS)
-                .compose(RxLifecycle.with(getLifecycle()).bindUntil<Long>(Lifecycle.State.DESTROYED))
-                .flatMap(new Function<Long, ObservableSource<Long>>() {
-                    @Override
-                    public ObservableSource<Long> apply(@NonNull Long aLong) throws Exception {
-                        return RxLifecycle.with(getLifecycle()).onlyIfResumedOrStarted(aLong);
-                    }
-                })
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(@NonNull Long o) throws Exception {
-                        Log.d(TAG, "test");
-                    }
-                });
+
+                .compose(RxLifecycle.with(getLifecycle()).<Long>disposeOnDestroy())
+
+                .flatMap(l -> RxLifecycle.with(getLifecycle()).onlyIfResumedOrStarted(l))
+
+                .subscribe(o ->
+                        Log.d(TAG, "test")
+                );
 
         RxLifecycle.with(getLifecycle())
                 .onEvent()
-                .subscribe(new Consumer<Lifecycle.Event>() {
-                    @Override
-                    public void accept(@NonNull Lifecycle.Event event) throws Exception {
-                        final CharSequence text = textView.getText();
-                        textView.setText(text + "\n" + event.toString());
-                    }
+
+                .subscribe(event -> {
+                    final CharSequence text = textView.getText();
+                    textView.setText(text + "\n" + event.toString());
                 });
     }
 
