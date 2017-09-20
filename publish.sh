@@ -1,0 +1,2 @@
+./gradlew install
+./gradlew bintrayUpload

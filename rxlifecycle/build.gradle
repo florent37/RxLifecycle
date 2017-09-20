@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.COMPILE_SDK
+    buildToolsVersion project.BUILD_TOOL
+
+    defaultConfig {
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.TARGET_SDK
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+}
+
+dependencies {
+    compile "com.android.support:appcompat-v7:$supportVersion"
+
+    annotationProcessor "android.arch.lifecycle:compiler:$project.arch_version"
+    compile "android.arch.lifecycle:runtime:$project.arch_version"
+    compile "android.arch.lifecycle:extensions:$project.arch_version"
+
+    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+}
+
+
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'rxlifecycle'
+    orgName = 'florent37'
+
+    publishedGroupId = 'com.github.florent37'
+    libraryName = 'RxLifecycle'
+    artifact = 'rxifecycle'
+
+    libraryDescription = 'RxLifecycle'
+
+    siteUrl = 'https://github.com/florent37/RxLifecycle'
+    gitUrl = 'https://github.com/florent37/RxLifecycle.git'
+
+    libraryVersion = rootProject.ext.libraryVersion
+
+    developerId = 'florent37'
+    developerName = 'florent37'
+    developerEmail = 'champigny.florent@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
+apply from: rootProject.file('gradle/install-v1.gradle')
+apply from: rootProject.file('gradle/bintray-android-v1.gradle')
