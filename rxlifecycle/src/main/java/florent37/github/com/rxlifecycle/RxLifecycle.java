@@ -126,6 +126,14 @@ public class RxLifecycle {
         });
     }
 
+    public static <T> Observable<T> onlyIfResumedOrStarted(LifecycleOwner lifecycleOwner, final T value) {
+        return RxLifecycle.with(lifecycleOwner).onlyIfResumedOrStarted(value);
+    }
+
+    public static <T> Observable<T> onlyIfResumedOrStarted(Lifecycle lifecycle, final T value) {
+        return RxLifecycle.with(lifecycle).onlyIfResumedOrStarted(value);
+    }
+
     public <T> Observable<T> onlyIfResumedOrStarted(final T value) {
         return Observable.just("")
                 .flatMap(new Function<String, ObservableSource<T>>() {
@@ -145,6 +153,14 @@ public class RxLifecycle {
                         }
                     }
                 });
+    }
+
+    public static void disposeOnDestroy(LifecycleOwner lifecycleOwner, final Disposable disposable) {
+        RxLifecycle.with(lifecycleOwner).disposeOnDestroy(disposable);
+    }
+
+    public static void disposeOnDestroy(Lifecycle lifecycle, final Disposable disposable) {
+        RxLifecycle.with(lifecycle).disposeOnDestroy(disposable);
     }
 
     public void disposeOnDestroy(final Disposable disposable) {
@@ -183,6 +199,14 @@ public class RxLifecycle {
                 });
     }
 
+    public static <T> ObservableTransformer<T, T> disposeOnDestroy(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).disposeOnDestroy();
+    }
+
+    public static <T> ObservableTransformer<T, T> disposeOnDestroy(LifecycleOwner lifecycleOwner) {
+        return RxLifecycle.with(lifecycleOwner).disposeOnDestroy();
+    }
+
     public <T> ObservableTransformer<T, T> disposeOnDestroy() {
         return new ObservableTransformer<T, T>() {
             @Override
@@ -196,6 +220,15 @@ public class RxLifecycle {
             }
         };
     }
+
+    public static <T> ObservableTransformer<T, T> disposeOnPause(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).disposeOnPause();
+    }
+
+    public static <T> ObservableTransformer<T, T> disposeOnPause(LifecycleOwner lifecycleOwner) {
+        return RxLifecycle.with(lifecycleOwner).disposeOnPause();
+    }
+
 
     public <T> ObservableTransformer<T, T> disposeOnPause() {
         return new ObservableTransformer<T, T>() {

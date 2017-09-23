@@ -7,6 +7,22 @@ This capability is useful in Android, where incomplete subscriptions can cause m
 
 **You don't need to extends Activity or Fragment**
 
+```
+mywebservice.searchUsers("florent")
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            
+            //will dispose this call when the activity / fragment destroys
+            .compose(disposeOnDestroy(this))
+            
+            //will wait until the screen is displayed
+            .flatMap(users -> onlyIfResumedOrStarted(this, users))
+            
+            .subscribe(users -> {
+                //display users with animation
+            });
+```
+
 <a href='https://ko-fi.com/A160LCC' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi1.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 [ ![Download](https://api.bintray.com/packages/florent37/maven/rxlifecycle/images/download.svg) ](https://bintray.com/florent37/maven/rxlifecycle/_latestVersion)
@@ -54,26 +70,46 @@ You can dispose an Rx operation when the activity state changes, for example
 Using `doOnSubscribe`
 
 ```
-Single.timer(10, TimeUnit.MINUTES) //simulates long operation
-          
-          .doOnSubscribe(disposable -> RxLifecycle.with(this).disposeOnDestroyed<Long>(disposable)
-          
-          .subscribe(l -> 
-               ...
-          });
+mywebservice.searchUsers("florent")
+            .doOnSubscribe(disposable -> RxLifecycle.with(this).disposeOnDestroyed<Long>(disposable)
+            .subscribe(l -> 
+                 ...
+            });
 ```
+
+Shorter :
+
+```
+mywebservice.searchUsers("florent")
+            .doOnSubscribe(disposable -> disposeOnDestroyed(this, disposable)
+            .subscribe(l -> 
+                 ...
+            });
+```
+
+With `import static florent37.github.com.rxlifecycle.RxLifecycle.disposeOnDestroyed;`
 
 Or `compose`
 
 ```
-Observable.timer(10, TimeUnit.MINUTES) //simulates long operation
-          
-          .compose(RxLifecycle.with(this).disposeOnDestroyed<Long>())
-          
-          .subscribe(l -> 
-               ...
-          });
+mywebservice.searchUsers("florent")
+            .compose(RxLifecycle.with(this).disposeOnDestroyed<Long>())
+            .subscribe(l -> 
+                 ...
+            });
 ```
+
+Shorter :
+
+```
+mywebservice.searchUsers("florent")
+            .compose(disposeOnDestroy(this))
+            .subscribe(l -> 
+                 ...
+            });
+```
+
+with `import static florent37.github.com.rxlifecycle.RxLifecycle.disposeOnDestroy;`
 
 Availables : `disposeOnStop`, `disposeOnPause`, etc...
 
@@ -82,16 +118,32 @@ Availables : `disposeOnStop`, `disposeOnPause`, etc...
 You can **pause** an Rx chain until it's not on an event, for example wait for activity to be resumed to perform an animation
 
 ```
-Observable.timer(10, TimeUnit.MINUTES) //simulates long operation
+mywebservice.searchUsers("florent")
           
-          //will pause
-          .flatMap(l -> RxLifecycle.with(this).onlyIfResumedOrStarted(l))
+            //will pause
+            .flatMap(l -> RxLifecycle.with(this).onlyIfResumedOrStarted(l))
           
-          //only if resumed
-          .subscribe(l -> 
-               ...
-          });
+            //only if resumed
+            .subscribe(l -> 
+                ...
+            });
 ```
+
+Shorter :
+
+```
+mywebservice.searchUsers("florent")
+          
+            //will pause
+            .flatMap(l -> onlyIfResumedOrStarted(this, l))
+          
+            //only if resumed
+            .subscribe(l -> 
+                 ...
+            });
+```
+
+with `import static florent37.github.com.rxlifecycle.RxLifecycle.onlyIfResumedOrStarted;`
 
 # Credits
 
