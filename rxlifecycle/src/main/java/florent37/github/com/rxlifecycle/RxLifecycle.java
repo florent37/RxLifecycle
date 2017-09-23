@@ -59,8 +59,24 @@ public class RxLifecycle {
         return new RxLifecycle(lifecycleFragment.getLifecycle());
     }
 
+    public static Observable<Lifecycle.Event> onEvent(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onEvent();
+    }
+
+    public static Observable<Lifecycle.Event> onEvent(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onEvent();
+    }
+
     public Observable<Lifecycle.Event> onEvent() {
         return subject;
+    }
+
+    public static Observable<Lifecycle.Event> onCreate(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onCreate();
+    }
+
+    public static Observable<Lifecycle.Event> onCreate(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onCreate();
     }
 
     public Observable<Lifecycle.Event> onCreate() {
@@ -72,6 +88,14 @@ public class RxLifecycle {
         });
     }
 
+    public static Observable<Lifecycle.Event> onStart(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onStart();
+    }
+
+    public static Observable<Lifecycle.Event> onStart(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onStart();
+    }
+
     public Observable<Lifecycle.Event> onStart() {
         return onEvent().filter(new Predicate<Lifecycle.Event>() {
             @Override
@@ -79,6 +103,14 @@ public class RxLifecycle {
                 return ON_START.equals(event);
             }
         });
+    }
+
+    public static Observable<Lifecycle.Event> onResume(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onResume();
+    }
+
+    public static Observable<Lifecycle.Event> onResume(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onResume();
     }
 
     public Observable<Lifecycle.Event> onResume() {
@@ -90,6 +122,14 @@ public class RxLifecycle {
         });
     }
 
+    public static Observable<Lifecycle.Event> onPause(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onPause();
+    }
+
+    public static Observable<Lifecycle.Event> onPause(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onPause();
+    }
+
     public Observable<Lifecycle.Event> onPause() {
         return onEvent().filter(new Predicate<Lifecycle.Event>() {
             @Override
@@ -97,6 +137,14 @@ public class RxLifecycle {
                 return ON_PAUSE.equals(event);
             }
         });
+    }
+
+    public static Observable<Lifecycle.Event> onStop(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onStop();
+    }
+
+    public static Observable<Lifecycle.Event> onStop(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onStop();
     }
 
     public Observable<Lifecycle.Event> onStop() {
@@ -108,6 +156,14 @@ public class RxLifecycle {
         });
     }
 
+    public static Observable<Lifecycle.Event> onDestroy(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onDestroy();
+    }
+
+    public static Observable<Lifecycle.Event> onDestroy(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onDestroy();
+    }
+
     public Observable<Lifecycle.Event> onDestroy() {
         return onEvent().filter(new Predicate<Lifecycle.Event>() {
             @Override
@@ -115,6 +171,14 @@ public class RxLifecycle {
                 return ON_DESTROY.equals(event);
             }
         });
+    }
+
+    public static Observable<Lifecycle.Event> onAny(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onAny();
+    }
+
+    public static Observable<Lifecycle.Event> onAny(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onAny();
     }
 
     public Observable<Lifecycle.Event> onAny() {
