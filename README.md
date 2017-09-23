@@ -13,11 +13,13 @@ This capability is useful in Android, where incomplete subscriptions can cause m
 
 ```java
 dependencies {
+
     compile 'com.github.florent37:rxlifecycle:(lastversion)'
 
     compile "com.android.support:appcompat-v7:26.1.0"
     
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    
 }
 ```
 
