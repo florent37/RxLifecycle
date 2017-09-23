@@ -11,16 +11,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 }
 
 dependencies {
     compile "com.android.support:appcompat-v7:$supportVersion"
-
-    annotationProcessor "android.arch.lifecycle:compiler:$project.arch_version"
-    compile "android.arch.lifecycle:runtime:$project.arch_version"
-    compile "android.arch.lifecycle:extensions:$project.arch_version"
 
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'

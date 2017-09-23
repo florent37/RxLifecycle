@@ -23,10 +23,9 @@ ext{
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 
-    arch_version = "1.0.0+"
     supportVersion = '26.1.0'
 
-    libraryVersion = "2.0.1"
+    libraryVersion = "2.0.2"
 }
 
 
