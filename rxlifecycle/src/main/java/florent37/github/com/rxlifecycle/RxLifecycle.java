@@ -239,6 +239,14 @@ public class RxLifecycle {
                 });
     }
 
+    public static void disposeOnStop(LifecycleOwner lifecycleOwner, final Disposable disposable) {
+        RxLifecycle.with(lifecycleOwner).disposeOnStop(disposable);
+    }
+
+    public static void disposeOnStop(Lifecycle lifecycle, final Disposable disposable) {
+        RxLifecycle.with(lifecycle).disposeOnStop(disposable);
+    }
+
     public void disposeOnStop(final Disposable disposable) {
         onStop()
                 .subscribeOn(Schedulers.newThread())
@@ -249,6 +257,14 @@ public class RxLifecycle {
                         disposable.dispose();
                     }
                 });
+    }
+
+    public static void disposeOnPause(LifecycleOwner lifecycleOwner, final Disposable disposable) {
+        RxLifecycle.with(lifecycleOwner).disposeOnPause(disposable);
+    }
+
+    public static void disposeOnPause(Lifecycle lifecycle, final Disposable disposable) {
+        RxLifecycle.with(lifecycle).disposeOnPause(disposable);
     }
 
     public void disposeOnPause(final Disposable disposable) {
@@ -306,6 +322,14 @@ public class RxLifecycle {
                 });
             }
         };
+    }
+
+    public static <T> ObservableTransformer<T, T> disposeOnStop(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).disposeOnStop();
+    }
+
+    public static <T> ObservableTransformer<T, T> disposeOnStop(LifecycleOwner lifecycleOwner) {
+        return RxLifecycle.with(lifecycleOwner).disposeOnStop();
     }
 
     public <T> ObservableTransformer<T, T> disposeOnStop() {
