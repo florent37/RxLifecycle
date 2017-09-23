@@ -4,8 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RxLifecycle.iml" filepath="$PROJECT_DIR$/RxLifecycle.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/rxlifecycle/rxlifecycle.iml" filepath="$PROJECT_DIR$/rxlifecycle/rxlifecycle.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxlifecycle/rxlifecycle.iml" filepath="$PROJECT_DIR$/rxlifecycle/rxlifecycle.iml" />
     </modules>
   </component>

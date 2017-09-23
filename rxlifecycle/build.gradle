@@ -33,7 +33,7 @@ ext {
 
     publishedGroupId = 'com.github.florent37'
     libraryName = 'RxLifecycle'
-    artifact = 'rxifecycle'
+    artifact = 'rxlifecycle'
 
     libraryDescription = 'RxLifecycle'
 
