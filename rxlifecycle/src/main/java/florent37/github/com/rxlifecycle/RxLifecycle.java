@@ -1,6 +1,7 @@
 package florent37.github.com.rxlifecycle;
 
 import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -42,8 +43,12 @@ public class RxLifecycle {
         lifecycle.addObserver(observer);
     }
 
-    public static RxLifecycle with(LifecycleRegistry lifecycleRegistry) {
-        return new RxLifecycle(lifecycleRegistry);
+    public static RxLifecycle with(LifecycleOwner lifecycleOwner) {
+        return new RxLifecycle(lifecycleOwner.getLifecycle());
+    }
+
+    public static RxLifecycle with(Lifecycle lifecycle) {
+        return new RxLifecycle(lifecycle);
     }
 
     public static RxLifecycle with(AppCompatActivity lifecycleActivity) {
