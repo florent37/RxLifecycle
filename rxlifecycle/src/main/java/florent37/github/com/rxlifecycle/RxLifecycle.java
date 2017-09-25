@@ -199,10 +199,10 @@ public class RxLifecycle {
     }
 
     public <T> Observable<T> onlyIfResumedOrStarted(final T value) {
-        return Observable.just("")
-                .flatMap(new Function<String, ObservableSource<T>>() {
+        return Observable.just(lifecycle)
+                .flatMap(new Function<Lifecycle, ObservableSource<T>>() {
                     @Override
-                    public ObservableSource<T> apply(@NonNull String $) throws Exception {
+                    public ObservableSource<T> apply(@NonNull Lifecycle lifecycle) throws Exception {
                         final Lifecycle.State currentState = lifecycle.getCurrentState();
                         if (currentState.equals(Lifecycle.State.RESUMED) || currentState.equals(Lifecycle.State.STARTED)) {
                             return Observable.just(value);
