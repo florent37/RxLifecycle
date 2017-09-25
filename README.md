@@ -145,6 +145,34 @@ mywebservice.searchUsers("florent")
 
 with `import static florent37.github.com.rxlifecycle.RxLifecycle.onlyIfResumedOrStarted;`
 
+# Usage with MVP
+
+You can bind easily your presenter with a lifecycle,
+example :
+
+```java
+public abstract class AbstractPresenter<V extends AbstractPresenter.View> {
+
+    private WeakReference<V> viewReference;
+
+    @CallSuper
+    public void bind(LifecycleOwner lifecycleOwner, V view) {
+        this.viewReference = new WeakReference<V>(view);
+
+        RxLifecycle.with(lifecycleOwner)
+                .onStart()
+                .distinct() //once
+                .subscribe(x -> start());
+    }
+
+    public abstract void start();
+
+    private interface View {
+
+    }
+}
+```
+
 # Credits
 
 Author: Florent Champigny [http://www.florentchampigny.com/](http://www.florentchampigny.com/)
