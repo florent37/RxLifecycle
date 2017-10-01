@@ -2,13 +2,26 @@ package florent37.github.com.rxlifecycle;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRegistry;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscription;
+
+import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
+import io.reactivex.CompletableTransformer;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableTransformer;
+import io.reactivex.Maybe;
+import io.reactivex.MaybeSource;
+import io.reactivex.MaybeTransformer;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -67,16 +80,144 @@ public class RxLifecycle {
         return RxLifecycle.with(lifecycle).onEvent();
     }
 
-    public Observable<Lifecycle.Event> onEvent() {
-        return subject;
-    }
-
     public static Observable<Lifecycle.Event> onCreate(Lifecycle lifecycle) {
         return RxLifecycle.with(lifecycle).onCreate();
     }
 
     public static Observable<Lifecycle.Event> onCreate(LifecycleOwner lifecycle) {
         return RxLifecycle.with(lifecycle).onCreate();
+    }
+
+    public static Observable<Lifecycle.Event> onStart(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onStart();
+    }
+
+    public static Observable<Lifecycle.Event> onStart(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onStart();
+    }
+
+    public static Observable<Lifecycle.Event> onResume(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onResume();
+    }
+
+    public static Observable<Lifecycle.Event> onResume(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onResume();
+    }
+
+    public static Observable<Lifecycle.Event> onPause(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onPause();
+    }
+
+    public static Observable<Lifecycle.Event> onPause(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onPause();
+    }
+
+    public static Observable<Lifecycle.Event> onStop(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onStop();
+    }
+
+    public static Observable<Lifecycle.Event> onStop(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onStop();
+    }
+
+    public static Observable<Lifecycle.Event> onDestroy(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onDestroy();
+    }
+
+    public static Observable<Lifecycle.Event> onDestroy(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onDestroy();
+    }
+
+    public static Observable<Lifecycle.Event> onAny(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).onAny();
+    }
+
+    public static Observable<Lifecycle.Event> onAny(LifecycleOwner lifecycle) {
+        return RxLifecycle.with(lifecycle).onAny();
+    }
+
+    public static <T> Observable<T> onlyIfResumedOrStarted(LifecycleOwner lifecycleOwner, final T value) {
+        return RxLifecycle.with(lifecycleOwner).onlyIfResumedOrStarted(value);
+    }
+
+    public static <T> Observable<T> onlyIfResumedOrStarted(Lifecycle lifecycle, final T value) {
+        return RxLifecycle.with(lifecycle).onlyIfResumedOrStarted(value);
+    }
+
+    public static void disposeOnDestroy(LifecycleOwner lifecycleOwner, final Disposable disposable) {
+        RxLifecycle.with(lifecycleOwner).disposeOnDestroy(disposable);
+    }
+
+    public static void disposeOnDestroy(Lifecycle lifecycle, final Disposable disposable) {
+        RxLifecycle.with(lifecycle).disposeOnDestroy(disposable);
+    }
+
+    public static void disposeOnDestroy(LifecycleOwner lifecycleOwner, final Subscription subscription) {
+        RxLifecycle.with(lifecycleOwner).disposeOnDestroy(subscription);
+    }
+
+    public static void disposeOnDestroy(Lifecycle lifecycle, final Subscription subscription) {
+        RxLifecycle.with(lifecycle).disposeOnDestroy(subscription);
+    }
+
+    public static void disposeOnStop(LifecycleOwner lifecycleOwner, final Disposable disposable) {
+        RxLifecycle.with(lifecycleOwner).disposeOnStop(disposable);
+    }
+
+    public static void disposeOnStop(Lifecycle lifecycle, final Disposable disposable) {
+        RxLifecycle.with(lifecycle).disposeOnStop(disposable);
+    }
+
+    public static void disposeOnStop(LifecycleOwner lifecycleOwner, final Subscription subscription) {
+        RxLifecycle.with(lifecycleOwner).disposeOnStop(subscription);
+    }
+
+    public static void disposeOnStop(Lifecycle lifecycle, final Subscription subscription) {
+        RxLifecycle.with(lifecycle).disposeOnStop(subscription);
+    }
+
+    public static void disposeOnPause(LifecycleOwner lifecycleOwner, final Disposable disposable) {
+        RxLifecycle.with(lifecycleOwner).disposeOnPause(disposable);
+    }
+
+    public static void disposeOnPause(Lifecycle lifecycle, final Disposable disposable) {
+        RxLifecycle.with(lifecycle).disposeOnPause(disposable);
+    }
+
+    public static void disposeOnPause(LifecycleOwner lifecycleOwner, final Subscription subscription) {
+        RxLifecycle.with(lifecycleOwner).disposeOnPause(subscription);
+    }
+
+    public static void disposeOnPause(Lifecycle lifecycle, final Subscription subscription) {
+        RxLifecycle.with(lifecycle).disposeOnPause(subscription);
+    }
+
+    public static <T> RxTransformer<T, T> disposeOnDestroy(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).disposeOnDestroy();
+    }
+
+    public static <T> RxTransformer<T, T> disposeOnDestroy(LifecycleOwner lifecycleOwner) {
+        return RxLifecycle.with(lifecycleOwner).disposeOnDestroy();
+    }
+
+    public static <T> RxTransformer<T, T> disposeOnPause(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).disposeOnPause();
+    }
+
+    public static <T> RxTransformer<T, T> disposeOnPause(LifecycleOwner lifecycleOwner) {
+        return RxLifecycle.with(lifecycleOwner).disposeOnPause();
+    }
+
+    public static <T> RxTransformer<T, T> disposeOnStop(Lifecycle lifecycle) {
+        return RxLifecycle.with(lifecycle).disposeOnStop();
+    }
+
+    public static <T> RxTransformer<T, T> disposeOnStop(LifecycleOwner lifecycleOwner) {
+        return RxLifecycle.with(lifecycleOwner).disposeOnStop();
+    }
+
+    public Observable<Lifecycle.Event> onEvent() {
+        return subject;
     }
 
     public Observable<Lifecycle.Event> onCreate() {
@@ -88,14 +229,6 @@ public class RxLifecycle {
         });
     }
 
-    public static Observable<Lifecycle.Event> onStart(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).onStart();
-    }
-
-    public static Observable<Lifecycle.Event> onStart(LifecycleOwner lifecycle) {
-        return RxLifecycle.with(lifecycle).onStart();
-    }
-
     public Observable<Lifecycle.Event> onStart() {
         return onEvent().filter(new Predicate<Lifecycle.Event>() {
             @Override
@@ -103,14 +236,6 @@ public class RxLifecycle {
                 return ON_START.equals(event);
             }
         });
-    }
-
-    public static Observable<Lifecycle.Event> onResume(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).onResume();
-    }
-
-    public static Observable<Lifecycle.Event> onResume(LifecycleOwner lifecycle) {
-        return RxLifecycle.with(lifecycle).onResume();
     }
 
     public Observable<Lifecycle.Event> onResume() {
@@ -122,14 +247,6 @@ public class RxLifecycle {
         });
     }
 
-    public static Observable<Lifecycle.Event> onPause(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).onPause();
-    }
-
-    public static Observable<Lifecycle.Event> onPause(LifecycleOwner lifecycle) {
-        return RxLifecycle.with(lifecycle).onPause();
-    }
-
     public Observable<Lifecycle.Event> onPause() {
         return onEvent().filter(new Predicate<Lifecycle.Event>() {
             @Override
@@ -137,14 +254,6 @@ public class RxLifecycle {
                 return ON_PAUSE.equals(event);
             }
         });
-    }
-
-    public static Observable<Lifecycle.Event> onStop(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).onStop();
-    }
-
-    public static Observable<Lifecycle.Event> onStop(LifecycleOwner lifecycle) {
-        return RxLifecycle.with(lifecycle).onStop();
     }
 
     public Observable<Lifecycle.Event> onStop() {
@@ -156,14 +265,6 @@ public class RxLifecycle {
         });
     }
 
-    public static Observable<Lifecycle.Event> onDestroy(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).onDestroy();
-    }
-
-    public static Observable<Lifecycle.Event> onDestroy(LifecycleOwner lifecycle) {
-        return RxLifecycle.with(lifecycle).onDestroy();
-    }
-
     public Observable<Lifecycle.Event> onDestroy() {
         return onEvent().filter(new Predicate<Lifecycle.Event>() {
             @Override
@@ -173,14 +274,6 @@ public class RxLifecycle {
         });
     }
 
-    public static Observable<Lifecycle.Event> onAny(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).onAny();
-    }
-
-    public static Observable<Lifecycle.Event> onAny(LifecycleOwner lifecycle) {
-        return RxLifecycle.with(lifecycle).onAny();
-    }
-
     public Observable<Lifecycle.Event> onAny() {
         return onEvent().filter(new Predicate<Lifecycle.Event>() {
             @Override
@@ -188,14 +281,6 @@ public class RxLifecycle {
                 return ON_ANY.equals(event);
             }
         });
-    }
-
-    public static <T> Observable<T> onlyIfResumedOrStarted(LifecycleOwner lifecycleOwner, final T value) {
-        return RxLifecycle.with(lifecycleOwner).onlyIfResumedOrStarted(value);
-    }
-
-    public static <T> Observable<T> onlyIfResumedOrStarted(Lifecycle lifecycle, final T value) {
-        return RxLifecycle.with(lifecycle).onlyIfResumedOrStarted(value);
     }
 
     public <T> Observable<T> onlyIfResumedOrStarted(final T value) {
@@ -219,14 +304,6 @@ public class RxLifecycle {
                 });
     }
 
-    public static void disposeOnDestroy(LifecycleOwner lifecycleOwner, final Disposable disposable) {
-        RxLifecycle.with(lifecycleOwner).disposeOnDestroy(disposable);
-    }
-
-    public static void disposeOnDestroy(Lifecycle lifecycle, final Disposable disposable) {
-        RxLifecycle.with(lifecycle).disposeOnDestroy(disposable);
-    }
-
     public void disposeOnDestroy(final Disposable disposable) {
         onDestroy()
                 .subscribeOn(Schedulers.newThread())
@@ -237,14 +314,6 @@ public class RxLifecycle {
                         disposable.dispose();
                     }
                 });
-    }
-
-    public static void disposeOnStop(LifecycleOwner lifecycleOwner, final Disposable disposable) {
-        RxLifecycle.with(lifecycleOwner).disposeOnStop(disposable);
-    }
-
-    public static void disposeOnStop(Lifecycle lifecycle, final Disposable disposable) {
-        RxLifecycle.with(lifecycle).disposeOnStop(disposable);
     }
 
     public void disposeOnStop(final Disposable disposable) {
@@ -259,14 +328,6 @@ public class RxLifecycle {
                 });
     }
 
-    public static void disposeOnPause(LifecycleOwner lifecycleOwner, final Disposable disposable) {
-        RxLifecycle.with(lifecycleOwner).disposeOnPause(disposable);
-    }
-
-    public static void disposeOnPause(Lifecycle lifecycle, final Disposable disposable) {
-        RxLifecycle.with(lifecycle).disposeOnPause(disposable);
-    }
-
     public void disposeOnPause(final Disposable disposable) {
         onPause()
                 .subscribeOn(Schedulers.newThread())
@@ -279,16 +340,49 @@ public class RxLifecycle {
                 });
     }
 
-    public static <T> ObservableTransformer<T, T> disposeOnDestroy(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).disposeOnDestroy();
-    }
+    public <T> RxTransformer<T, T> disposeOnDestroy() {
+        return new RxTransformer<T, T>() {
+            @Override
+            public Publisher<T> apply(@NonNull Flowable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Subscription>() {
+                    @Override
+                    public void accept(@NonNull Subscription subscription) throws Exception {
+                        disposeOnDestroy(subscription);
+                    }
+                });
+            }
 
-    public static <T> ObservableTransformer<T, T> disposeOnDestroy(LifecycleOwner lifecycleOwner) {
-        return RxLifecycle.with(lifecycleOwner).disposeOnDestroy();
-    }
 
-    public <T> ObservableTransformer<T, T> disposeOnDestroy() {
-        return new ObservableTransformer<T, T>() {
+            @Override
+            public CompletableSource apply(@NonNull Completable upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnDestroy(disposable);
+                    }
+                });
+            }
+
+            @Override
+            public SingleSource<T> apply(@NonNull Single<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnDestroy(disposable);
+                    }
+                });
+            }
+
+            @Override
+            public MaybeSource<T> apply(@NonNull Maybe<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnDestroy(disposable);
+                    }
+                });
+            }
+
             @Override
             public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
                 return upstream.doOnSubscribe(new Consumer<Disposable>() {
@@ -301,17 +395,49 @@ public class RxLifecycle {
         };
     }
 
-    public static <T> ObservableTransformer<T, T> disposeOnPause(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).disposeOnPause();
-    }
+    public <T> RxTransformer<T, T> disposeOnPause() {
+        return new RxTransformer<T, T>() {
+            @Override
+            public Publisher<T> apply(@NonNull Flowable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Subscription>() {
+                    @Override
+                    public void accept(@NonNull Subscription subscription) throws Exception {
+                        disposeOnPause(subscription);
+                    }
+                });
+            }
 
-    public static <T> ObservableTransformer<T, T> disposeOnPause(LifecycleOwner lifecycleOwner) {
-        return RxLifecycle.with(lifecycleOwner).disposeOnPause();
-    }
 
+            @Override
+            public CompletableSource apply(@NonNull Completable upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnPause(disposable);
+                    }
+                });
+            }
 
-    public <T> ObservableTransformer<T, T> disposeOnPause() {
-        return new ObservableTransformer<T, T>() {
+            @Override
+            public SingleSource<T> apply(@NonNull Single<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnPause(disposable);
+                    }
+                });
+            }
+
+            @Override
+            public MaybeSource<T> apply(@NonNull Maybe<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnPause(disposable);
+                    }
+                });
+            }
+
             @Override
             public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
                 return upstream.doOnSubscribe(new Consumer<Disposable>() {
@@ -324,16 +450,48 @@ public class RxLifecycle {
         };
     }
 
-    public static <T> ObservableTransformer<T, T> disposeOnStop(Lifecycle lifecycle) {
-        return RxLifecycle.with(lifecycle).disposeOnStop();
-    }
+    public <T> RxTransformer<T, T> disposeOnStop() {
+        return new RxTransformer<T, T>() {
+            @Override
+            public Publisher<T> apply(@NonNull Flowable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Subscription>() {
+                    @Override
+                    public void accept(@NonNull Subscription subscription) throws Exception {
+                        disposeOnStop(subscription);
+                    }
+                });
+            }
 
-    public static <T> ObservableTransformer<T, T> disposeOnStop(LifecycleOwner lifecycleOwner) {
-        return RxLifecycle.with(lifecycleOwner).disposeOnStop();
-    }
+            @Override
+            public CompletableSource apply(@NonNull Completable upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnStop(disposable);
+                    }
+                });
+            }
 
-    public <T> ObservableTransformer<T, T> disposeOnStop() {
-        return new ObservableTransformer<T, T>() {
+            @Override
+            public SingleSource<T> apply(@NonNull Single<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnStop(disposable);
+                    }
+                });
+            }
+
+            @Override
+            public MaybeSource<T> apply(@NonNull Maybe<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOnStop(disposable);
+                    }
+                });
+            }
+
             @Override
             public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
                 return upstream.doOnSubscribe(new Consumer<Disposable>() {
@@ -344,5 +502,46 @@ public class RxLifecycle {
                 });
             }
         };
+    }
+
+
+    public void disposeOnDestroy(final Subscription subscription) {
+        onDestroy()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Lifecycle.Event>() {
+                    @Override
+                    public void accept(@NonNull Lifecycle.Event event) throws Exception {
+                        subscription.cancel();
+                    }
+                });
+    }
+
+    public void disposeOnStop(final Subscription subscription) {
+        onStop()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Lifecycle.Event>() {
+                    @Override
+                    public void accept(@NonNull Lifecycle.Event event) throws Exception {
+                        subscription.cancel();
+                    }
+                });
+    }
+
+    public void disposeOnPause(final Subscription subscription) {
+        onPause()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Lifecycle.Event>() {
+                    @Override
+                    public void accept(@NonNull Lifecycle.Event event) throws Exception {
+                        subscription.cancel();
+                    }
+                });
+    }
+
+    public abstract class RxTransformer<U, D> implements ObservableTransformer<U, D>, SingleTransformer<U, D>, MaybeTransformer<U, D>, CompletableTransformer, FlowableTransformer<U, D> {
+
     }
 }
