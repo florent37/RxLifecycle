@@ -11,6 +11,9 @@ This capability is useful in Android, where incomplete subscriptions can cause m
 
 **You don't need to extends Activity or Fragment**
 
+Compatible with all RxJava2 types : **Single**, **Observable**, **Flowable**, **Maybe**, **Completable**
+
+
 ```
 mywebservice.searchUsers("florent")
             .observeOn(AndroidSchedulers.mainThread())

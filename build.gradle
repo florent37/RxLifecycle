@@ -25,7 +25,7 @@ ext{
 
     supportVersion = '26.1.0'
 
-    libraryVersion = "2.0.3"
+    libraryVersion = "2.0.4"
 }
 
 
