@@ -34,7 +34,7 @@ mywebservice.searchUsers("florent")
 
 ```java
 dependencies {
-    compile 'com.github.florent37:rxlifecycle:(lastversion)'
+    implementation 'com.github.florent37:rxlifecycle:(lastversion)'
 }
 ```
 
