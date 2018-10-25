@@ -21,7 +21,7 @@ mywebservice.searchUsers("florent")
             .subscribeOn(Schedulers.io())
             
             //will dispose this call when the activity / fragment destroys
-            .compose(disposeOnDestroy(this))
+            .compose(disposeOnDestroy(getLifecycle()))
             
             //will wait until the screen is displayed
             .flatMap(users -> onlyIfResumedOrStarted(this, users))

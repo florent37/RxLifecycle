@@ -20,6 +20,8 @@ import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 
+import static florent37.github.com.rxlifecycle.RxLifecycle.DISPOSE_EVENT.DESTROY;
+import static florent37.github.com.rxlifecycle.RxLifecycle.disposeOn;
 import static florent37.github.com.rxlifecycle.RxLifecycle.disposeOnDestroy;
 import static florent37.github.com.rxlifecycle.RxLifecycle.onlyIfResumedOrStarted;
 
@@ -43,15 +45,15 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe();
 
         Single.timer(10, TimeUnit.MINUTES)
-                .compose(disposeOnDestroy(this))
+                .compose(disposeOnDestroy(getLifecycle()))
                 .subscribe(l -> Log.d(TAG, "test"));
 
         Single.timer(10, TimeUnit.MINUTES)
-                .doOnSubscribe(disposable -> disposeOnDestroy(this, disposable))
+                .doOnSubscribe(disposable -> disposeOn(getLifecycle(), DESTROY, disposable))
                 .subscribe(l -> Log.d(TAG, "test"));
 
         Observable.timer(10, TimeUnit.SECONDS)
-                .compose(disposeOnDestroy(this))
+                .compose(disposeOnDestroy(getLifecycle()))
                 .flatMap(l -> onlyIfResumedOrStarted(this, l))
                 .subscribe(o ->
                         Log.d(TAG, "test")

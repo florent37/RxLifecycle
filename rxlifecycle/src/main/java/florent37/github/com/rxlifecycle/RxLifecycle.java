@@ -152,6 +152,24 @@ public class RxLifecycle {
         RxLifecycle.with(lifecycle).disposeOnDestroy(disposable);
     }
 
+    public static void disposeOn(Lifecycle lifecycle, DISPOSE_EVENT disposeEvent, final Disposable disposable) {
+        switch (disposeEvent){
+            case STOP:
+                disposeOnStop(lifecycle, disposable);
+                break;
+            case PAUSE:
+                disposeOnPause(lifecycle, disposable);
+                break;
+            case DESTROY:
+                disposeOnDestroy(lifecycle, disposable);
+                break;
+        }
+    }
+
+    public static void disposeOn(LifecycleOwner lifecycleOwner, DISPOSE_EVENT disposeEvent, final Disposable disposable) {
+        disposeOn(lifecycleOwner.getLifecycle(), disposeEvent, disposable);
+    }
+
     public static void disposeOnDestroy(LifecycleOwner lifecycleOwner, final Subscription subscription) {
         RxLifecycle.with(lifecycleOwner).disposeOnDestroy(subscription);
     }
@@ -190,6 +208,14 @@ public class RxLifecycle {
 
     public static void disposeOnPause(Lifecycle lifecycle, final Subscription subscription) {
         RxLifecycle.with(lifecycle).disposeOnPause(subscription);
+    }
+
+    public static <T> RxTransformer<T, T> disposeOn(Lifecycle lifecycle, DISPOSE_EVENT disposeEvent) {
+        return RxLifecycle.with(lifecycle).disposeOn(disposeEvent);
+    }
+
+    public static <T> RxTransformer<T, T> disposeOn(LifecycleOwner lifecycleOwner, DISPOSE_EVENT disposeEvent) {
+        return disposeOn(lifecycleOwner.getLifecycle(), disposeEvent);
     }
 
     public static <T> RxTransformer<T, T> disposeOnDestroy(Lifecycle lifecycle) {
@@ -505,6 +531,61 @@ public class RxLifecycle {
     }
 
 
+    public <T> RxTransformer<T, T> disposeOn(final DISPOSE_EVENT disposeEvent) {
+        return new RxTransformer<T, T>() {
+            @Override
+            public Publisher<T> apply(@NonNull Flowable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Subscription>() {
+                    @Override
+                    public void accept(@NonNull Subscription subscription) throws Exception {
+                        disposeOn(disposeEvent);
+                    }
+                });
+            }
+
+            @Override
+            public CompletableSource apply(@NonNull Completable upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOn(disposeEvent);
+                    }
+                });
+            }
+
+            @Override
+            public SingleSource<T> apply(@NonNull Single<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOn(disposeEvent);
+                    }
+                });
+            }
+
+            @Override
+            public MaybeSource<T> apply(@NonNull Maybe<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOn(disposeEvent);
+                    }
+                });
+            }
+
+            @Override
+            public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(@NonNull Disposable disposable) throws Exception {
+                        disposeOn(disposeEvent);
+                    }
+                });
+            }
+        };
+    }
+
+
     public void disposeOnDestroy(final Subscription subscription) {
         onDestroy()
                 .subscribeOn(Schedulers.newThread())
@@ -543,5 +624,11 @@ public class RxLifecycle {
 
     public abstract class RxTransformer<U, D> implements ObservableTransformer<U, D>, SingleTransformer<U, D>, MaybeTransformer<U, D>, CompletableTransformer, FlowableTransformer<U, D> {
 
+    }
+
+    public enum DISPOSE_EVENT {
+        DESTROY,
+        STOP,
+        PAUSE
     }
 }
