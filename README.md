@@ -23,9 +23,6 @@ mywebservice.searchUsers("florent")
             //will dispose this call when the activity / fragment destroys
             .compose(disposeOnDestroy(getLifecycle()))
             
-            //will wait until the screen is displayed
-            .flatMap(users -> onlyIfResumedOrStarted(this, users))
-            
             .subscribe(users -> {
                 //display users with animation
             });
@@ -37,20 +34,14 @@ mywebservice.searchUsers("florent")
 
 ```java
 dependencies {
-
     compile 'com.github.florent37:rxlifecycle:(lastversion)'
-
-    compile "com.android.support:appcompat-v7:26.1.0"
-    
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    
 }
 ```
 
 # Listen to activity / fragment lifecycle events
 
 ```java
-RxLifecycle.with((Fragment / Activity)this)
+RxLifecycle.with(this)
            .onDestroy()
            .subscribe(event -> 
                 /*do what you had to do on view destroy*/
@@ -79,37 +70,17 @@ Using `doOnSubscribe`
 
 ```
 mywebservice.searchUsers("florent")
-            .doOnSubscribe(disposable -> RxLifecycle.with(this).disposeOnDestroyed<Long>(disposable)
-            .subscribe(l -> 
-                 ...
-            });
-```
-
-Shorter :
-
-```
-mywebservice.searchUsers("florent")
             .doOnSubscribe(disposable -> disposeOnDestroyed(this, disposable)
             .subscribe(l -> 
                  ...
             });
 ```
 
-With `import static florent37.github.com.rxlifecycle.RxLifecycle.disposeOnDestroyed;`
-
-Or `compose`
+Using `compose`
 
 ```
-mywebservice.searchUsers("florent")
-            .compose(RxLifecycle.with(this).disposeOnDestroyed<Long>())
-            .subscribe(l -> 
-                 ...
-            });
-```
+//With `import static florent37.github.com.rxlifecycle.RxLifecycle.disposeOnDestroyed;`
 
-Shorter :
-
-```
 mywebservice.searchUsers("florent")
             .compose(disposeOnDestroy(this))
             .subscribe(l -> 
@@ -117,9 +88,17 @@ mywebservice.searchUsers("florent")
             });
 ```
 
-with `import static florent37.github.com.rxlifecycle.RxLifecycle.disposeOnDestroy;`
-
 Availables : `disposeOnStop`, `disposeOnPause`, etc...
+
+You can also use enum state
+
+```
+mywebservice.searchUsers("florent")
+            .doOnSubscribe(disposable -> disposeOn(this, DESTROY, disposable)
+            .subscribe(l -> 
+                 ...
+            });
+```
 
 # Wait until an Activity state
 
@@ -129,29 +108,14 @@ You can **pause** an Rx chain until it's not on an event, for example wait for a
 mywebservice.searchUsers("florent")
           
             //will pause
-            .flatMap(l -> RxLifecycle.with(this).onlyIfResumedOrStarted(l))
+            .flatMap(value -> onlyIfResumedOrStarted(this, value))
           
             //only if resumed
-            .subscribe(l -> 
-                ...
-            });
-```
-
-Shorter :
-
-```
-mywebservice.searchUsers("florent")
-          
-            //will pause
-            .flatMap(l -> onlyIfResumedOrStarted(this, l))
-          
-            //only if resumed
-            .subscribe(l -> 
+            .subscribe(value -> 
                  ...
             });
 ```
 
-with `import static florent37.github.com.rxlifecycle.RxLifecycle.onlyIfResumedOrStarted;`
 
 # Usage with MVP
 
