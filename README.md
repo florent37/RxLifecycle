@@ -5,11 +5,6 @@ Rx binding of stock Android Activities & Fragment Lifecycle, avoiding memory lea
 This library allows one to automatically finish sequences based on Android lifecycle state,
 This capability is useful in Android, where incomplete subscriptions can cause memory leaks.
 
-<a href="https://goo.gl/WXW8Dc">
-  <img alt="Android app on Google Play" src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
-</a>
-
-
 **You don't need to extends Activity or Fragment**
 
 Compatible with all RxJava2 types : **Single**, **Observable**, **Flowable**, **Maybe**, **Completable**
